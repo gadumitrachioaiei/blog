@@ -1,0 +1,33 @@
+syntax="proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package blog;
+
+message Lesson {
+    string domain = 1;
+    string title = 2;
+    string content = 3;
+    int64 reads = 4;
+    google.protobuf.Timestamp created = 5;
+
+}
+
+message Content {
+    repeated Lesson lessons = 1;
+}
+
+message Query {
+    string term = 1;
+}
+
+message Paragraph {
+    string content = 1;
+}
+
+service Blog {
+    rpc Search(Query) returns (Content) {}
+    rpc SearchAsStream(Query) returns (stream Lesson) {}
+    rpc Write(stream Paragraph) returns (Lesson) {}
+    rpc WriteRead(stream Paragraph) returns (stream Lesson){}
+}
